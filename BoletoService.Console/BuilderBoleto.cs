@@ -17,7 +17,11 @@ public class BuilderBoleto
             numeroFatura.PadLeft(13, '0'),
             CANAL_EMISSOR);
 
-        return CalculaDigitosVerificadores(codigoBarras);
+        var result = CalculaDigitosVerificadores(codigoBarras);
+
+        var x = $"{codigoBarras}, {result.CodigoDeBarras}";
+
+        return result;
     }
 
     private Boleto CalculaDigitosVerificadores(string valor)
@@ -30,7 +34,7 @@ public class BuilderBoleto
         int dvBloco3 = CalcularModulo11(valor, MultiplicadoresModulo11.Bloco3);
         int dvBloco4 = CalcularModulo11(valor, MultiplicadoresModulo11.Bloco4);
 
-        string linhaDigitavel = FormatLinhaDigitavel(valor, dvBloco1, dvBloco2, dvBloco3, dvBloco4);
+        string linhaDigitavel = FormataLinhaDigitavel(valor, dvBloco1, dvBloco2, dvBloco3, dvBloco4);
 
         return new Boleto(valor, linhaDigitavel);
     }
@@ -40,9 +44,9 @@ public class BuilderBoleto
         int soma = 0;
         for (int i = 0; i < valor.Length; i++)
         {
-            if (multiplicadores.TryGetValue(i + 1, out int peso))
+            if (multiplicadores.TryGetValue(i + 1, out int multiplicador))
             {
-                soma += (valor[i] - '0') * peso;
+                soma += (valor[i] - '0') * multiplicador;
             }
         }
 
@@ -50,7 +54,7 @@ public class BuilderBoleto
         return (resto == 0 || resto == 1) ? 0 : (resto == 10 ? 1 : 11 - resto);
     }
 
-    private string FormatLinhaDigitavel(string valor, int dv1, int dv2, int dv3, int dv4)
+    private string FormataLinhaDigitavel(string valor, int dv1, int dv2, int dv3, int dv4)
     {
         return string.Format(
             "{0}-{1} {2}-{3} {4}-{5} {6}-{7}",

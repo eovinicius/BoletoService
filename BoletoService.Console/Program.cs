@@ -25,15 +25,14 @@ try
     var serviceProvider = serviceCollection.BuildServiceProvider();
 
     var builderBoleto = serviceProvider.GetService<BuilderBoleto>()!;
-    // Arrange
-    var valorTotal = 55.93m;
-    var codigoCliente = "1538519032";
-    var numeroFatura = "402191846138";
+    var valorTotal = 1622.38m;
+    var codigoCliente = "1537033410";
+    var numeroFatura = "402010347895";
 
     // Act
     var builderBolet = new BuilderBoleto();
     var boleto = builderBolet.Execute(valorTotal, codigoCliente, numeroFatura);
-
+    
     var x = builderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 }
 catch (Exception ex)
