@@ -1,6 +1,6 @@
 namespace BoletoService.Console;
 
-public static class BuilderCodigoBarra
+public static class BuilderBoleto
 {
     private const string MODULO_11 = "8480";
     private const string CODIGO_CONVENIO = "0379";

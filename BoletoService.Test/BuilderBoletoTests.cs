@@ -2,7 +2,7 @@ using BoletoService.Console;
 
 namespace BoletoService.Test;
 
-public class BuilderCodigoBarraTests
+public class BuilderBoletoTests
 {
     [Fact]
     public void CalculaDigitosVerificadores_DeveRetornarValoresCorretos()
@@ -13,7 +13,7 @@ public class BuilderCodigoBarraTests
         var numeroFatura = "400479216229";
 
         // Act
-        var boleto = BuilderCodigoBarra.Execute(valorTotal, codigoCliente, numeroFatura);
+        var boleto = BuilderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 
         // Assert
         Assert.NotNull(boleto.CodigoDeBarras);

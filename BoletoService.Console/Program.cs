@@ -4,6 +4,7 @@ var valorTotal = 24119.00m;
 var codigoCliente = "1511116008";
 var numeroFatura = "400479216229";
 
-(string x, string y) = BuilderCodigoBarra.Execute(valorTotal, codigoCliente, numeroFatura);
-Console.WriteLine(x);
-Console.WriteLine(y);
+var boleto = BuilderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
+
+Console.WriteLine(boleto.CodigoDeBarras);
+Console.WriteLine(boleto.linhaDigitavel);
