@@ -1,12 +1,12 @@
 namespace BoletoService.Console;
 
-public static class BuilderBoleto
+public class BuilderBoleto
 {
     private const string MODULO_11 = "8480";
     private const string CODIGO_CONVENIO = "0379";
     private const string CANAL_EMISSOR = "88";
 
-    public static Boleto Execute(decimal valorTotal, string codigoCliente, string numeroFatura)
+    public Boleto Execute(decimal valorTotal, string codigoCliente, string numeroFatura)
     {
 
         string codigoBarras = string.Concat(
@@ -20,7 +20,7 @@ public static class BuilderBoleto
         return CalculaDigitosVerificadores(codigoBarras);
     }
 
-    private static Boleto CalculaDigitosVerificadores(string valor)
+    private Boleto CalculaDigitosVerificadores(string valor)
     {
         int dvGeral = CalcularModulo11(valor, MultiplicadoresModulo11.Geral);
         valor = string.Concat(valor.Substring(0, 3), dvGeral, valor.Substring(4));
@@ -35,7 +35,7 @@ public static class BuilderBoleto
         return new Boleto(valor, linhaDigitavel);
     }
 
-    private static int CalcularModulo11(string valor, Dictionary<int, int> multiplicadores)
+    private int CalcularModulo11(string valor, Dictionary<int, int> multiplicadores)
     {
         int soma = 0;
         for (int i = 0; i < valor.Length; i++)
@@ -50,7 +50,7 @@ public static class BuilderBoleto
         return (resto == 0 || resto == 1) ? 0 : (resto == 10 ? 1 : 11 - resto);
     }
 
-    private static string FormatLinhaDigitavel(string valor, int dv1, int dv2, int dv3, int dv4)
+    private string FormatLinhaDigitavel(string valor, int dv1, int dv2, int dv3, int dv4)
     {
         return string.Format(
             "{0}-{1} {2}-{3} {4}-{5} {6}-{7}",

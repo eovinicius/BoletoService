@@ -13,7 +13,8 @@ public class BuilderBoletoTests
         var numeroFatura = "400479216229";
 
         // Act
-        var boleto = BuilderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
+        var builderBoleto = new BuilderBoleto();
+        var boleto = builderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 
         // Assert
         Assert.NotNull(boleto.CodigoDeBarras);
