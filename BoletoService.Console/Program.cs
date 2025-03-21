@@ -7,4 +7,4 @@ var numeroFatura = "400479216229";
 var boleto = BuilderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 
 Console.WriteLine(boleto.CodigoDeBarras);
-Console.WriteLine(boleto.linhaDigitavel);
+Console.WriteLine(boleto.LinhaDigitavel);
