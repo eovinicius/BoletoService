@@ -6,24 +6,21 @@ public static class BuilderCodigoBarra
     private const string CODIGO_CONVENIO = "0379";
     private const string CANAL_EMISSOR = "88";
 
-    public static (string, string) Execute(decimal valorTotal, string codigoCliente, string numeroFatura)
+    public static Boleto Execute(decimal valorTotal, string codigoCliente, string numeroFatura)
     {
-        const int TAMANHO_VALOR_TOTAL = 11;
-        const int TAMANHO_CODIGO_CLIENTE = 10;
-        const int TAMANHO_NUMERO_FATURA = 13;
 
         string codigoBarras = string.Concat(
             MODULO_11,
-            valorTotal.ToString().Replace(",", "").PadLeft(TAMANHO_VALOR_TOTAL, '0'),
+            valorTotal.ToString().Replace(",", "").PadLeft(11, '0'),
             CODIGO_CONVENIO,
-            codigoCliente.PadLeft(TAMANHO_CODIGO_CLIENTE, '0'),
-            numeroFatura.PadLeft(TAMANHO_NUMERO_FATURA, '0'),
+            codigoCliente.PadLeft(10, '0'),
+            numeroFatura.PadLeft(13, '0'),
             CANAL_EMISSOR);
 
         return CalculaDigitosVerificadores(codigoBarras);
     }
 
-    private static (string valorCalculado, string linhaDigitavel) CalculaDigitosVerificadores(string valor)
+    private static Boleto CalculaDigitosVerificadores(string valor)
     {
         int dvGeral = CalcularModulo11(valor, MultiplicadoresModulo11.Geral);
         valor = string.Concat(valor.Substring(0, 3), dvGeral, valor.Substring(4));
@@ -35,7 +32,7 @@ public static class BuilderCodigoBarra
 
         string linhaDigitavel = FormatLinhaDigitavel(valor, dvBloco1, dvBloco2, dvBloco3, dvBloco4);
 
-        return (valor, linhaDigitavel);
+        return new Boleto(valor, linhaDigitavel);
     }
 
     private static int CalcularModulo11(string valor, Dictionary<int, int> multiplicadores)
