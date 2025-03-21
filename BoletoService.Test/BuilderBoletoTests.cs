@@ -17,8 +17,8 @@ public class BuilderBoletoTests
 
         // Assert
         Assert.NotNull(boleto.CodigoDeBarras);
-        Assert.NotNull(boleto.linhaDigitavel);
+        Assert.NotNull(boleto.LinhaDigitavel);
         Assert.Equal("84800000241190003791511116008040047921622988", boleto.CodigoDeBarras);
-        Assert.Equal("84800000241-6 19000379151-5 11160080400-5 47921622988-0", boleto.linhaDigitavel);
+        Assert.Equal("84800000241-6 19000379151-5 11160080400-5 47921622988-0", boleto.LinhaDigitavel);
     }
 }
