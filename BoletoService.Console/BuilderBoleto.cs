@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace BoletoService.Console;
 
 public class BuilderBoleto
@@ -8,13 +10,16 @@ public class BuilderBoleto
 
     public Boleto Execute(decimal valorTotal, string codigoCliente, string numeroFatura)
     {
+        string valorTotalFormatado = valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
+        string codigoClienteFormatado = codigoCliente.PadLeft(10, '0');
+        string numeroFaturaFormatodo = numeroFatura.PadLeft(13, '0');
 
         string codigoBarras = string.Concat(
             MODULO_11,
-            valorTotal.ToString().Replace(",", "").PadLeft(11, '0'),
+            valorTotalFormatado.PadLeft(11, '0'),
             CODIGO_CONVENIO,
-            codigoCliente.PadLeft(10, '0'),
-            numeroFatura.PadLeft(13, '0'),
+            codigoClienteFormatado,
+            numeroFaturaFormatodo,
             CANAL_EMISSOR);
 
         var result = CalculaDigitosVerificadores(codigoBarras);
@@ -51,7 +56,12 @@ public class BuilderBoleto
         }
 
         int resto = soma % 11;
-        return (resto == 0 || resto == 1) ? 0 : (resto == 10 ? 1 : 11 - resto);
+        return resto switch
+        {
+            0 or 1 => 0,
+            10 => 1,
+            _ => 11 - resto
+        };
     }
 
     private string FormataLinhaDigitavel(string valor, int dv1, int dv2, int dv3, int dv4)
