@@ -8,5 +8,4 @@ public class AppDbContext : DbContext
     protected AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
-
 }

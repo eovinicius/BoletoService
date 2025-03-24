@@ -2,7 +2,6 @@ namespace BoletoService.Console.Services;
 
 public class CalculaDigitosVerificadores
 {
-
     public static Boleto Calcular(string valor)
     {
         int dvGeral = CalcularModulo11(valor, MultiplicadoresModulo11.Geral);

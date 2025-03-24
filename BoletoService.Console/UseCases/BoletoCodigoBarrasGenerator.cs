@@ -1,6 +1,7 @@
 using System.Globalization;
 using BoletoService.Console.Data;
 using BoletoService.Console.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace BoletoService.Console.UseCases;
 
@@ -16,11 +17,23 @@ public class BoletoCodigoBarrasGenerator
         _dbContext = dbContext;
     }
 
-    public Boleto Execute()
+    public async Task<Boleto> Execute()
     {
-        string valorTotalFormatado = valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
-        string codigoClienteFormatado = codigoCliente.PadLeft(10, '0');
-        string numeroFaturaFormatodo = numeroFatura.PadLeft(13, '0');
+        var algumaCoisa = await _dbContext.Boletos.FirstOrDefaultAsync(x => x.Id);
+
+        if (algumaCoisa is null)
+        {
+            return;
+        }
+
+        if (algumaCoisa.MaiorOferta is not null)
+        {
+            algumaCoisa.valorTotal -= algumaCoisa.MaiorOferta;
+        }
+
+        string valorTotalFormatado = algumaCoisa.valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
+        string codigoClienteFormatado = algumaCoisa.codigoCliente.PadLeft(10, '0');
+        string numeroFaturaFormatodo = algumaCoisa.numeroFatura.PadLeft(13, '0');
 
         string codigoBarras = string.Concat(
             MODULO_11,
@@ -36,6 +49,4 @@ public class BoletoCodigoBarrasGenerator
 
         return result;
     }
-
-
 }

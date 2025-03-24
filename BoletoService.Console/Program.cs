@@ -1,4 +1,6 @@
-﻿using BoletoService.Console.UseCases;
+﻿using BoletoService.Console.Data;
+using BoletoService.Console.UseCases;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -21,7 +23,16 @@ Log.Logger = new LoggerConfiguration()
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddSingleton<IConfiguration>(configuration);
 serviceCollection.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
+
 serviceCollection.AddTransient<BoletoCodigoBarrasGenerator>();
+
+serviceCollection.AddDbContext<AppDbContext>(options =>
+{
+    var connetionString = configuration.GetConnectionString("database");
+
+    options.UseSqlServer("connetionString");
+});
+
 
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
