@@ -1,6 +1,6 @@
 using BoletoService.Console.Models;
 
-namespace BoletoService.Console.UseCases;
+namespace BoletoService.Console.Services;
 
 public partial class BoletoCodigoBarrasGenerator
 {
