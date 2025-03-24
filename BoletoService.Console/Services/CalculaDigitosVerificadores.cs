@@ -1,35 +1,9 @@
-using System.Globalization;
+namespace BoletoService.Console.Services;
 
-namespace BoletoService.Console;
-
-public class BuilderBoleto
+public class CalculaDigitosVerificadores
 {
-    private const string MODULO_11 = "848";
-    private const string CODIGO_CONVENIO = "0379";
-    private const string CANAL_EMISSOR = "88";
 
-    public Boleto Execute(decimal valorTotal, string codigoCliente, string numeroFatura)
-    {
-        string valorTotalFormatado = valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
-        string codigoClienteFormatado = codigoCliente.PadLeft(10, '0');
-        string numeroFaturaFormatodo = numeroFatura.PadLeft(13, '0');
-
-        string codigoBarras = string.Concat(
-            MODULO_11,
-            valorTotalFormatado,
-            CODIGO_CONVENIO,
-            codigoClienteFormatado,
-            numeroFaturaFormatodo,
-            CANAL_EMISSOR);
-
-        var result = CalculaDigitosVerificadores(codigoBarras);
-
-        var x = $"{codigoBarras}, {result.CodigoDeBarras}";
-
-        return result;
-    }
-
-    private Boleto CalculaDigitosVerificadores(string valor)
+    public static Boleto Calcular(string valor)
     {
         int dvGeral = CalcularModulo11(valor, MultiplicadoresModulo11.Geral);
         valor = string.Concat(valor.Substring(0, 3), dvGeral, valor.Substring(4));
@@ -44,7 +18,7 @@ public class BuilderBoleto
         return new Boleto(valor, linhaDigitavel);
     }
 
-    private int CalcularModulo11(string valor, Dictionary<int, int> multiplicadores)
+    private static int CalcularModulo11(string valor, Dictionary<int, int> multiplicadores)
     {
         int soma = 0;
         for (int i = 0; i < valor.Length; i++)
@@ -64,7 +38,7 @@ public class BuilderBoleto
         };
     }
 
-    private string FormataLinhaDigitavel(string valor, int dv1, int dv2, int dv3, int dv4)
+    private static string FormataLinhaDigitavel(string valor, int dv1, int dv2, int dv3, int dv4)
     {
         return string.Format(
             "{0}-{1} {2}-{3} {4}-{5} {6}-{7}",

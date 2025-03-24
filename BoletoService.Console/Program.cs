@@ -1,4 +1,4 @@
-﻿using BoletoService.Console;
+﻿using BoletoService.Console.UseCases;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -21,7 +21,7 @@ Log.Logger = new LoggerConfiguration()
 var serviceCollection = new ServiceCollection();
 serviceCollection.AddSingleton<IConfiguration>(configuration);
 serviceCollection.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
-serviceCollection.AddTransient<BuilderBoleto>();
+serviceCollection.AddTransient<BoletoCodigoBarrasGenerator>();
 
 var serviceProvider = serviceCollection.BuildServiceProvider();
 
@@ -30,7 +30,7 @@ try
     Log.Information("Aplicação iniciada.");
     Log.Information("Ambiente carregado: {Environment}", environment);
 
-    await serviceProvider.GetRequiredService<BuilderBoleto>()!.Execute();
+    // await serviceProvider.GetRequiredService<BoletoCodigoBarrasGenerator>()!.Execute();
 }
 catch (Exception ex)
 {

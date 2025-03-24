@@ -13,7 +13,7 @@ public class BuilderBoletoTests
         var numeroFatura = "400479216229";
 
         // Act
-        var builderBoleto = new BuilderBoleto();
+        var builderBoleto = new BoletoCodigoBarrasGenerator();
         var boleto = builderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 
         // Assert
@@ -31,7 +31,7 @@ public class BuilderBoletoTests
         var numeroFatura = "400479132899";
 
         // Act
-        var builderBoleto = new BuilderBoleto();
+        var builderBoleto = new BoletoCodigoBarrasGenerator();
         var boleto = builderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 
         // Assert
@@ -50,7 +50,7 @@ public class BuilderBoletoTests
         var numeroFatura = "402010347895";
 
         // Act
-        var builderBoleto = new BuilderBoleto();
+        var builderBoleto = new BoletoCodigoBarrasGenerator();
         var boleto = builderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 
         // Assert
