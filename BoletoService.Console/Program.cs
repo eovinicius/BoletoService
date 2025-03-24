@@ -14,6 +14,8 @@ var configuration = new ConfigurationBuilder()
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(configuration)
+    .MinimumLevel.Information()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Hour)
     .CreateLogger();
 
 var serviceCollection = new ServiceCollection();
@@ -32,7 +34,7 @@ try
     // Act
     var builderBolet = new BuilderBoleto();
     var boleto = builderBolet.Execute(valorTotal, codigoCliente, numeroFatura);
-    
+
     var x = builderBoleto.Execute(valorTotal, codigoCliente, numeroFatura);
 }
 catch (Exception ex)
