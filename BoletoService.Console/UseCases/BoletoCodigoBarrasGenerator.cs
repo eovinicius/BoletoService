@@ -21,18 +21,18 @@ public partial class BoletoCodigoBarrasGenerator
 
     public async Task<BoletoResponse> Execute()
     {
-        var dados = await _repository.GetFirst();
+        var Valor = await _repository.GetFirst();
 
-        if (dados is null)
+        if (Valor is null)
         {
             throw new InvalidOperationException("Boleto não encontrado.");
         }
 
-        var valorTotal = _valorTotalstrategy.CalcularValorTotal(dados);
+        var valorTotal = _valorTotalstrategy.CalcularValorTotal(Valor);
 
         string valorTotalFormatado = valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
-        string codigoClienteFormatado = dados.CodigoCliente.PadLeft(10, '0');
-        string numeroFaturaFormatodo = dados.NumeroFatura.PadLeft(13, '0');
+        string codigoClienteFormatado = Valor.CodigoCliente.PadLeft(10, '0');
+        string numeroFaturaFormatodo = Valor.NumeroFatura.PadLeft(13, '0');
 
         string codigoBarras = string.Concat(
             MODULO_11,
