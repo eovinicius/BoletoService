@@ -4,7 +4,7 @@ namespace BoletoService.Console;
 
 public class BuilderBoleto
 {
-    private const string MODULO_11 = "8480";
+    private const string MODULO_11 = "848";
     private const string CODIGO_CONVENIO = "0379";
     private const string CANAL_EMISSOR = "88";
 
@@ -16,7 +16,7 @@ public class BuilderBoleto
 
         string codigoBarras = string.Concat(
             MODULO_11,
-            valorTotalFormatado.PadLeft(11, '0'),
+            valorTotalFormatado,
             CODIGO_CONVENIO,
             codigoClienteFormatado,
             numeroFaturaFormatodo,
