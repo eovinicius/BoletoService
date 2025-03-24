@@ -3,7 +3,6 @@ using Bogus;
 using BoletoService.Console.Models;
 using BoletoService.Console.Repositories;
 using BoletoService.Console.UseCases;
-using static BoletoService.Console.UseCases.BoletoCodigoBarrasGenerator;
 
 namespace BoletoService.Test;
 
@@ -21,13 +20,18 @@ public class BoletoCodigoBarrasGeneratorTest
             ValorFatura = faker.Random.Decimal(10, 1000)
         };
 
+        var boletoMock2 = new Boleto()
+        {
+            CodigoCliente = "1504788553",
+            NumeroFatura = "400479132899",
+            ValorFatura = 16830.00m
+        };
+
         var repositoryMock = new Mock<IBoletoRepository>();
-        repositoryMock.Setup(r => r.GetFirst()).ReturnsAsync(boletoMock);
+        repositoryMock.Setup(r => r.GetFirst()).ReturnsAsync(boletoMock2);
 
-        var valorTotalStrategyMock = new Mock<IValorTotalStrategy>();
-        valorTotalStrategyMock.Setup(v => v.CalcularValorTotal(boletoMock)).Returns(boletoMock.ValorFatura);
 
-        var generator = new BoletoCodigoBarrasGenerator(repositoryMock.Object, valorTotalStrategyMock.Object);
+        var generator = new BoletoCodigoBarrasGenerator(repositoryMock.Object);
 
         // Act
         var result = await generator.Execute();
@@ -35,5 +39,7 @@ public class BoletoCodigoBarrasGeneratorTest
         // Assert
         Assert.NotNull(result);
         Assert.False(string.IsNullOrWhiteSpace(result.CodigoDeBarras));
+        Assert.Equal("84860000124600003791512471230040047913289988", result.CodigoDeBarras);
+        Assert.Equal("84860000124-0 60000379151-1 24712300400-3 47913289988-4", result.LinhaDigitavel);
     }
 }

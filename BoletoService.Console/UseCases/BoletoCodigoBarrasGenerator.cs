@@ -11,12 +11,10 @@ public partial class BoletoCodigoBarrasGenerator
     private const string CODIGO_CONVENIO = "0379";
     private const string CANAL_EMISSOR = "88";
     private readonly IBoletoRepository _repository;
-    private readonly IValorTotalStrategy _valorTotalstrategy;
 
-    public BoletoCodigoBarrasGenerator(IBoletoRepository repository, IValorTotalStrategy valorTotalstrategy)
+    public BoletoCodigoBarrasGenerator(IBoletoRepository repository)
     {
         _repository = repository;
-        _valorTotalstrategy = valorTotalstrategy;
     }
 
     public async Task<BoletoResponse> Execute()
@@ -28,7 +26,7 @@ public partial class BoletoCodigoBarrasGenerator
             throw new InvalidOperationException("Boleto não encontrado.");
         }
 
-        var valorTotal = _valorTotalstrategy.CalcularValorTotal(Valor);
+        var valorTotal = CalculaDescontos.Calcular(Valor);
 
         string valorTotalFormatado = valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
         string codigoClienteFormatado = Valor.CodigoCliente.PadLeft(10, '0');
