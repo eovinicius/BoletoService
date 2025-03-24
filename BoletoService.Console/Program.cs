@@ -28,7 +28,8 @@ serviceCollection.AddTransient<BoletoCodigoBarrasGenerator>();
 
 serviceCollection.AddDbContext<AppDbContext>(options =>
 {
-    var connetionString = configuration.GetConnectionString("database");
+    var connectionString = configuration.GetConnectionString("database") ??
+                           throw new ArgumentNullException(nameof(configuration));
 
     options.UseSqlServer("connetionString");
 });
