@@ -30,9 +30,7 @@ try
     Log.Information("Aplicação iniciada.");
     Log.Information("Ambiente carregado: {Environment}", environment);
 
-    var builderBoleto = serviceProvider.GetRequiredService<BuilderBoleto>();
-
-    builderBoleto.Execute();
+    await serviceProvider.GetRequiredService<BuilderBoleto>()!.Execute();
 }
 catch (Exception ex)
 {
