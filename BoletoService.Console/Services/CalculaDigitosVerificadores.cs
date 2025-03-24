@@ -1,8 +1,10 @@
+using BoletoService.Console.Models;
+
 namespace BoletoService.Console.Services;
 
 public class CalculaDigitosVerificadores
 {
-    public static Boleto Calcular(string valor)
+    public static BoletoResponse Calcular(string valor)
     {
         int dvGeral = CalcularModulo11(valor, MultiplicadoresModulo11.Geral);
         valor = string.Concat(valor.Substring(0, 3), dvGeral, valor.Substring(4));
@@ -14,7 +16,7 @@ public class CalculaDigitosVerificadores
 
         string linhaDigitavel = FormataLinhaDigitavel(valor, dvBloco1, dvBloco2, dvBloco3, dvBloco4);
 
-        return new Boleto(valor, linhaDigitavel);
+        return new BoletoResponse(valor, linhaDigitavel);
     }
 
     private static int CalcularModulo11(string valor, Dictionary<int, int> multiplicadores)

@@ -1,3 +1,4 @@
+using BoletoService.Console.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BoletoService.Console.Data;

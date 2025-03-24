@@ -1,39 +1,38 @@
 using System.Globalization;
-using BoletoService.Console.Data;
+using BoletoService.Console.Models;
+using BoletoService.Console.Repositories;
 using BoletoService.Console.Services;
-using Microsoft.EntityFrameworkCore;
 
 namespace BoletoService.Console.UseCases;
 
-public class BoletoCodigoBarrasGenerator
+public partial class BoletoCodigoBarrasGenerator
 {
     private const string MODULO_11 = "8480";
     private const string CODIGO_CONVENIO = "0379";
     private const string CANAL_EMISSOR = "88";
-    private readonly AppDbContext _dbContext;
+    private readonly IBoletoRepository _repository;
+    private readonly IValorTotalStrategy _valorTotalstrategy;
 
-    public BoletoCodigoBarrasGenerator(AppDbContext dbContext)
+    public BoletoCodigoBarrasGenerator(IBoletoRepository repository, IValorTotalStrategy valorTotalstrategy)
     {
-        _dbContext = dbContext;
+        _repository = repository;
+        _valorTotalstrategy = valorTotalstrategy;
     }
 
-    public async Task<Boleto> Execute()
+    public async Task<BoletoResponse> Execute()
     {
-        var algumaCoisa = await _dbContext.Boletos.FirstOrDefaultAsync(x => x.Id);
+        var dados = await _repository.GetFirst();
 
-        if (algumaCoisa is null)
+        if (dados is null)
         {
-            return;
+            throw new InvalidOperationException("Boleto não encontrado.");
         }
 
-        if (algumaCoisa.MaiorOferta is not null)
-        {
-            algumaCoisa.valorTotal -= algumaCoisa.MaiorOferta;
-        }
+        var valorTotal = _valorTotalstrategy.CalcularValorTotal(dados);
 
-        string valorTotalFormatado = algumaCoisa.valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
-        string codigoClienteFormatado = algumaCoisa.codigoCliente.PadLeft(10, '0');
-        string numeroFaturaFormatodo = algumaCoisa.numeroFatura.PadLeft(13, '0');
+        string valorTotalFormatado = valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
+        string codigoClienteFormatado = dados.CodigoCliente.PadLeft(10, '0');
+        string numeroFaturaFormatodo = dados.NumeroFatura.PadLeft(13, '0');
 
         string codigoBarras = string.Concat(
             MODULO_11,

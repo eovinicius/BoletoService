@@ -1,4 +1,4 @@
-namespace BoletoService.Console;
+namespace BoletoService.Console.Models;
 
 public class MultiplicadoresModulo11
 {
