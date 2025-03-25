@@ -4,12 +4,12 @@ namespace BoletoService.Console.Services;
 
 public class CalculaDescontos
 {
-    public static decimal Calcular(Boleto boleto)
+    public static decimal Calcular(Decimal valorFatura, decimal? desconto)
     {
-        decimal valorTotal = boleto.ValorFatura;
-        if (boleto.Desconto is not null && boleto.Desconto > 0)
+        decimal valorTotal = valorFatura;
+        if (desconto is not null && desconto > 0)
         {
-            valorTotal -= boleto.Desconto.Value;
+            valorTotal -= desconto.Value;
         }
         return valorTotal;
     }

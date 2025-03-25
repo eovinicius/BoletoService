@@ -25,7 +25,7 @@ public partial class BoletoCodigoBarrasGenerator
             return;
         }
 
-        var valorTotal = CalculaDescontos.Calcular(Valor);
+        var valorTotal = CalculaDescontos.Calcular(Valor.ValorFatura, Valor.Desconto);
 
         string valorTotalFormatado = valorTotal.ToString("F2", CultureInfo.InvariantCulture).Replace(".", "").Replace(",", "").PadLeft(11, '0');
         string codigoClienteFormatado = Valor.CodigoCliente.PadLeft(10, '0');
