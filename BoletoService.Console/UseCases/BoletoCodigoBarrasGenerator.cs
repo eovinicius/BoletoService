@@ -1,5 +1,4 @@
 using System.Globalization;
-using BoletoService.Console.Models;
 using BoletoService.Console.Repositories;
 using BoletoService.Console.Services;
 
@@ -17,13 +16,13 @@ public partial class BoletoCodigoBarrasGenerator
         _repository = repository;
     }
 
-    public async Task<BoletoResponse> Execute()
+    public async Task Execute()
     {
         var Valor = await _repository.GetFirst();
 
         if (Valor is null)
         {
-            throw new InvalidOperationException("Boleto não encontrado.");
+            return;
         }
 
         var valorTotal = CalculaDescontos.Calcular(Valor);
@@ -43,7 +42,5 @@ public partial class BoletoCodigoBarrasGenerator
         var result = CalculaDigitosVerificadores.Calcular(codigoBarras);
 
         var x = $"{codigoBarras}, {result.CodigoDeBarras}";
-
-        return result;
     }
 }

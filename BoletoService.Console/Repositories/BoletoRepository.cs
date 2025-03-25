@@ -6,7 +6,6 @@ namespace BoletoService.Console.Repositories;
 
 public class BoletoRepository : IBoletoRepository
 {
-
     private readonly AppDbContext _dbContext;
 
     public BoletoRepository(AppDbContext dbContext)
